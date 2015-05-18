@@ -65,5 +65,33 @@ describe('postcss-conditionals', function () {
     it('understands negation', function () {
         test('@if NOT (a == b) { success {} }', 'success {}');
     });
+    it('understands addition', function () {
+        test('@if 1 + 1 == 2 { success {} }', 'success {}');
+        test('@if (1 + 2) + 3 == 6 { success {} }', 'success {}');
+        test('@if (1 + 2) + 3 == 7 { success {} }', '');
+        test('@if 1px + 2 == 3px { success {} }', 'success {}');
+        test('@if 1 + 1px == 2px { success {} }', 'success {}');
+    });
+    it('understands subtraction', function () {
+        test('@if 3 - 2 == 1 { success {} }', 'success {}');
+        test('@if (3 - 2) + 1 == 2 { success {} }', 'success {}');
+        test('@if (3 + 2) + 1 == 3 { success {} }', '');
+        test('@if 3px - 2px == 1px { success {} }', 'success {}');
+        test('@if 2 - 1px == 1px { success {} }', 'success {}');
+    });
+    it('understands multiplication', function () {
+        test('@if 1 * 2 == 2 { success {} }', 'success {}');
+        test('@if (1 * 2) * 3 == 6 { success {} }', 'success {}');
+        test('@if (1 * 2) * 3 == 7 { success {} }', '');
+        test('@if 3px * 2px == 6px { success {} }', 'success {}');
+        test('@if 2 * 2px == 4px { success {} }', 'success {}');
+    });
+    it('understands division', function () {
+        test('@if 2 / 2 == 1 { success {} }', 'success {}');
+        test('@if (4 / 2) / 2 == 1 { success {} }', 'success {}');
+        test('@if (4 / 2) * 2 == 2 { success {} }', '');
+        test('@if 4px / 2px == 2px { success {} }', 'success {}');
+        test('@if 4 / 2px == 2px { success {} }', 'success {}');
+    });
 });
 

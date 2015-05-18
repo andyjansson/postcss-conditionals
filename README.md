@@ -66,7 +66,7 @@ p {
 ```
 [postcss-simple-vars]: https://github.com/postcss/postcss-simple-vars
 
-or [postcss-for]:
+and with [postcss-for]:
 
 ```css
 @for $i from 1 to 3 {
