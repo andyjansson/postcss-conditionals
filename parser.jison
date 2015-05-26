@@ -10,6 +10,10 @@
 "or"                                                    yytext = yytext.toUpperCase(); return 'OP';
 "NOT"                                                   return 'NOT';
 "not"                                                   yytext = yytext.toUpperCase(); return 'NOT';
+"*"                                                     return 'MUL';
+"/"                                                     return 'DIV';
+"+"                                                     return 'ADD';
+"-"                                                     return 'SUB';
 [0-9]+("."[0-9]+)?px\b                                  return 'LENGTH';
 [0-9]+("."[0-9]+)?cm\b                                  return 'LENGTH';
 [0-9]+("."[0-9]+)?mm\b                                  return 'LENGTH';
@@ -35,7 +39,7 @@
 [0-9]+("."[0-9]+)?vh\b                                  return 'VWS';
 [0-9]+("."[0-9]+)?vmin\b                                return 'VMINS';
 [0-9]+("."[0-9]+)?vmax\b                                return 'VMAXS';
-[0-9]+("."[0-9]+)?\%\b                                  return 'PERCENTAGE';
+[0-9]+("."[0-9]+)?\%                                    return 'PERCENTAGE';
 [0-9]+("."[0-9]+)?\b                                    return 'NUMBER';
 [a-zA-Z0-9-_]+\b                                        return 'STRING';
 \'(\\\'|[^\'\\])+\'                                     yytext = yytext.slice(1,-1); return 'STRING';
@@ -48,10 +52,6 @@
 ">"                                                     return 'RELOP';
 "<="                                                    return 'RELOP';
 "<"                                                     return 'RELOP';
-"*"                                                     return 'MUL';
-"/"                                                     return 'DIV';
-"+"                                                     return 'ADD';
-"-"                                                     return 'SUB';
 <<EOF>>                                                 return 'EOF';
 
 /lex
@@ -103,7 +103,6 @@ math_expression
 	| math_expression SUB math_expression { $$ = { type: 'MathematicalExpression', operator: $2, left: $1, right: $3 }; }
 	| math_expression MUL math_expression { $$ = { type: 'MathematicalExpression', operator: $2, left: $1, right: $3 }; }
 	| math_expression DIV math_expression { $$ = { type: 'MathematicalExpression', operator: $2, left: $1, right: $3 }; }
-	| SUB math_expression %prec UMINUS { $$ = -$2; }
 	| LPAREN math_expression RPAREN { $$ = $2; }
 	| css_value { $$ = $1; }
 	| value { $$ = $1; }
@@ -111,6 +110,7 @@ math_expression
 	
 value
 	: NUMBER { $$ = { type: 'Value', value: $1 }; }
+	| SUB NUMBER { $$ = { type: 'Value', value: -$2 }; }
 	;
 	
 css_value
@@ -128,6 +128,7 @@ css_value
 	| VMINS { $$ = { type: 'VminValue', value: parseFloat($1) }; }
 	| VMAXS { $$ = { type: 'VmaxValue', value: parseFloat($1) }; }
 	| PERCENTAGE { $$ = { type: 'PercentageValue', value: parseFloat($1) }; }
+	| SUB css_value { var prev = $2; prev.value *= -1; $$ = prev; }
 	;
 		
 string
