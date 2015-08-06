@@ -1,6 +1,6 @@
-var postcss = require('postcss'),
+var postcss      = require('postcss'),
     conditionals = require('../'),
-    tape = require('tape');
+    tape         = require('tape');
 
 function test(input, output) {
     tape(function (assert) {
