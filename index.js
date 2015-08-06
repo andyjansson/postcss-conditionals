@@ -213,6 +213,7 @@ var parseElseStatement = function (rule, prevPassed) {
 };
 
 var parseIfStatement = function(rule, input) {
+    processRule(rule);
     if (!input)
         throw rule.error('Missing condition', { plugin: 'postcss-conditionals' });
     var previousPassed = arguments[2] || false;
@@ -236,13 +237,14 @@ var parseIfStatement = function(rule, input) {
     rule.removeSelf();
 };
 
+function processRule(css) {
+    css.eachAtRule('if', function (rule) {
+        parseIfStatement(rule, rule.params);
+    });
+}
+
 module.exports = postcss.plugin('postcss-conditionals', function (opts) {
     opts = opts || {};
 
-    return function (css) {
-        css.eachAtRule(function (rule) {
-            if ( rule.name === 'if' )
-                parseIfStatement(rule, rule.params);
-        });
-    };
+    return processRule;
 });

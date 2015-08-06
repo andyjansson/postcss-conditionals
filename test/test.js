@@ -1,12 +1,16 @@
 var postcss = require('postcss'),
-	conditionals = require('../'),
-	assert = require('assert');
+    conditionals = require('../'),
+    tape = require('tape');
 
-var test = function (input, output) {
-    assert.equal(postcss(conditionals()).process(input).css, output);
-};
+function test(input, output) {
+    tape(function (assert) {
+        assert.plan(1);
+        assert.equal(postcss(conditionals()).process(input).css, output);
+    });
+}
 
 test('@if a == a { success {} }', 'success {}');
+test('@if a == b { success {} } @else { branch {} }', 'branch {}');
 test('@if a == b { success {} }', '');
 test('@if a != b { success {} }', 'success {}');
 test('@if a != a { success {} }', '');
@@ -57,3 +61,8 @@ test('@if rgb(0, 255, 255) == aqua { success {} }', 'success {}');
 test('@if rgba(0, 255, 255, .5) == aqua { success {} }', '');
 test('@if rgb(0, 255, 255) == rgb(0, 100%, 100%) { success {} }', 'success {}');
 test('@if rgba(0, 100%, 100%, 1) == rgb(0, 100%, 100%) { success {} }', 'success {}');
+test('@if a == a { @if b == b { success {} } }', 'success {}');
+test('@if a == a { @if b != b { success {} } @else { branch {} } }', 'branch {}');
+test('@if a != a { @if b == b { success {} } }', '');
+test('@if a == a { @if b != b { success {} } }', '');
+test('@if a == a { @if b == b { @if c==c { success {} } } }', 'success {}');
