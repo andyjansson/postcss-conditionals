@@ -1,7 +1,7 @@
 var postcss     = require('postcss'),
     parser      = require('./parser').parser,
     unitconvert = require('css-unit-converter'),
-	color		= require('css-color-converter');
+    color       = require('css-color-converter');
 
 var convertNodes = function (left, right) {
     var converted = {
@@ -14,18 +14,18 @@ var convertNodes = function (left, right) {
         return converted;
     }
     switch (left.type) {
-		case 'ColorValue':
-			converted.left = { type: left.type, value: color(left.value).toHexString() };
+        case 'ColorValue':
+            converted.left = { type: left.type, value: color(left.value).toHexString() };
             switch (right.type) {
                 case left.type:
-					break;
-				case 'Value':
-					converted.right = { type: left.type, value: color().fromRgb([right.value, right.value, right.value]).toHexString() };
-					break;
-				default:
+                    break;
+                case 'Value':
+                    converted.right = { type: left.type, value: color().fromRgb([right.value, right.value, right.value]).toHexString() };
+                    break;
+                default:
                     throw new Error('Cannot convert ' + (typeof right !== 'boolean' ? right.type : 'Boolean') + ' to ' + left.type);
-			}
-			break;
+            }
+            break;
         case 'LengthValue':
         case 'AngleValue':
         case 'TimeValue':
@@ -66,9 +66,9 @@ var convertNodes = function (left, right) {
             break;
         case 'Value':
             switch (right.type) {
-				case 'ColorValue':
-					converted.left = { type: right.type, value: color().fromRgb([left.value, left.value, left.value]).toHexString() };
-					break;
+                case 'ColorValue':
+                    converted.left = { type: right.type, value: color().fromRgb([left.value, left.value, left.value]).toHexString() };
+                    break;
                 case 'LengthValue':
                 case 'AngleValue':
                 case 'TimeValue':
@@ -128,40 +128,40 @@ var evalParseTree = function (tree) {
         var converted = convertNodes(left, right);
         left = converted.left;
         right = converted.right;
-		
-		if (left.type == 'ColorValue') {
-			var val1 = color(left.value).toRgbaArray(),
-				val2 = color(right.value).toRgbaArray();
-				
-			if (val1[3] !== val2[3]) {
-				throw new Error('Alpha channels must be equal');
-			}
-				
-			switch (operator) {
-				case '+':
-					val1[0] = Math.min(val1[0] + val2[0], 255);
-					val1[1] = Math.min(val1[1] + val2[1], 255);
-					val1[2] = Math.min(val1[2] + val2[2], 255);
-					break;
-				case '-':
-					val1[0] = Math.max(val1[0] - val2[0], 0);
-					val1[1] = Math.max(val1[1] - val2[1], 0);
-					val1[2] = Math.max(val1[2] - val2[2], 0);
-					break;
-				case '*':
-					val1[0] = Math.min(val1[0] * val2[0], 255);
-					val1[1] = Math.min(val1[1] * val2[1], 255);
-					val1[2] = Math.min(val1[2] * val2[2], 255);
-					break;
-				case '/':
-					val1[0] = Math.max(val1[0] / val2[0], 0);
-					val1[1] = Math.max(val1[1] / val2[1], 0);
-					val1[2] = Math.max(val1[2] / val2[2], 0);
-					break;
-			}
-			left.value = color().fromRgba(val1).toHexString();
-			return left;
-		}
+        
+        if (left.type == 'ColorValue') {
+            var val1 = color(left.value).toRgbaArray(),
+                val2 = color(right.value).toRgbaArray();
+                
+            if (val1[3] !== val2[3]) {
+                throw new Error('Alpha channels must be equal');
+            }
+                
+            switch (operator) {
+                case '+':
+                    val1[0] = Math.min(val1[0] + val2[0], 255);
+                    val1[1] = Math.min(val1[1] + val2[1], 255);
+                    val1[2] = Math.min(val1[2] + val2[2], 255);
+                    break;
+                case '-':
+                    val1[0] = Math.max(val1[0] - val2[0], 0);
+                    val1[1] = Math.max(val1[1] - val2[1], 0);
+                    val1[2] = Math.max(val1[2] - val2[2], 0);
+                    break;
+                case '*':
+                    val1[0] = Math.min(val1[0] * val2[0], 255);
+                    val1[1] = Math.min(val1[1] * val2[1], 255);
+                    val1[2] = Math.min(val1[2] * val2[2], 255);
+                    break;
+                case '/':
+                    val1[0] = Math.max(val1[0] / val2[0], 0);
+                    val1[1] = Math.max(val1[1] / val2[1], 0);
+                    val1[2] = Math.max(val1[2] / val2[2], 0);
+                    break;
+            }
+            left.value = color().fromRgba(val1).toHexString();
+            return left;
+        }
 
         switch (operator) {
             case '+':
@@ -191,9 +191,9 @@ var evalParseTree = function (tree) {
                 return parseMathExpression(parseTree(subtree.left), parseTree(subtree.right), subtree.operator);
             case 'UnaryExpression':
                 return !parseTree(subtree.argument);
-			case 'ColorValue':
-				subtree.value = color(subtree.value).toHexString();
-				return subtree;
+            case 'ColorValue':
+                subtree.value = color(subtree.value).toHexString();
+                return subtree;
             case 'String':
                 return subtree;
             default:
@@ -213,6 +213,7 @@ var parseElseStatement = function (rule, prevPassed) {
 };
 
 var parseIfStatement = function(rule, input) {
+    processRule(rule);
     if (!input)
         throw rule.error('Missing condition', { plugin: 'postcss-conditionals' });
     var previousPassed = arguments[2] || false;
@@ -236,13 +237,14 @@ var parseIfStatement = function(rule, input) {
     rule.removeSelf();
 };
 
+function processRule(css) {
+    css.eachAtRule('if', function (rule) {
+        parseIfStatement(rule, rule.params);
+    });
+}
+
 module.exports = postcss.plugin('postcss-conditionals', function (opts) {
     opts = opts || {};
 
-    return function (css) {
-        css.eachAtRule(function (rule) {
-            if ( rule.name === 'if' )
-                parseIfStatement(rule, rule.params);
-        });
-    };
+    return processRule;
 });
