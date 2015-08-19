@@ -191,6 +191,8 @@ var evalParseTree = function (tree) {
                 return parseMathExpression(parseTree(subtree.left), parseTree(subtree.right), subtree.operator);
             case 'UnaryExpression':
                 return !parseTree(subtree.argument);
+            case 'BooleanValue': 
+                return subtree.value;
             case 'ColorValue':
                 subtree.value = color(subtree.value).toHexString();
                 return subtree;

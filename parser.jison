@@ -4,6 +4,10 @@
 %lex
 %%
 \s+                                                                            /* skip whitespace */
+"true"                                                                                return 'BOOL';
+"TRUE"                                                                                return 'BOOL';
+"false"                                                                               return 'BOOL';
+"FALSE"                                                                               return 'BOOL';
 "AND"                                                                                 return 'OP';
 "and"                                                                                 yytext = yytext.toUpperCase(); return 'OP';
 "OR"                                                                                  return 'OP';
@@ -233,6 +237,7 @@ expr
 	| unary_expression { $$ = $1; }
 	| LPAREN unary_expression RPAREN { $$ = $2; }
 	| math_expression { $$ = $1; }
+	| bool_value { $$ = $1; }
 	| string { $$ = $1; }
 	;
 
@@ -258,10 +263,15 @@ math_expression
 	| math_expression DIV math_expression { $$ = { type: 'MathematicalExpression', operator: $2, left: $1, right: $3 }; }
 	| LPAREN math_expression RPAREN { $$ = $2; }
 	| css_value { $$ = $1; }
-        | color_value { $$ = $1; }
+	| color_value { $$ = $1; }
 	| value { $$ = $1; }
 	;
 
+bool_value
+	: BOOL { $$ = { type: 'BooleanValue', value: $1.toLowerCase() == "true" }; }
+	| LPAREN bool_value RPAREN { $$ = $2; }
+	;
+	
 value
 	: NUMBER { $$ = { type: 'Value', value: $1 }; }
 	| SUB NUMBER { $$ = { type: 'Value', value: -$2 }; }
