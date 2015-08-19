@@ -1,7 +1,6 @@
 #1.3.0 - Unreleased
 * Add support for nested if statements
 * Add boolean data type
-* Update PostCSS dependency to 5.0.0
 
 #1.2.0 - 2015-05-27
 * Add transformations and comparisons of color values

@@ -211,7 +211,7 @@ var evalParseTree = function (tree) {
 var parseElseStatement = function (rule, prevPassed) {
     if (!prevPassed)
         rule.parent.insertBefore(rule, rule.nodes);
-    rule.remove();
+    rule.removeSelf();
 };
 
 var parseIfStatement = function(rule, input) {
@@ -236,11 +236,11 @@ var parseIfStatement = function(rule, input) {
         else
             parseElseStatement(next, passed);
     }
-    rule.remove();
+    rule.removeSelf();
 };
 
 function processRule(css) {
-    css.walkAtRules('if', function (rule) {
+    css.eachAtRule('if', function (rule) {
         parseIfStatement(rule, rule.params);
     });
 }
