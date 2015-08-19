@@ -1,4 +1,4 @@
-#1.3.0 - Unreleased
+#1.3.0 - 2015-08-19
 * Add support for nested if statements
 * Add boolean data type
 
