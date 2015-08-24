@@ -1,3 +1,7 @@
+#1.3.1 - 2015-08-24
+* Fix `@else` incorrectly being invoked when any statement other than the one
+  directly preceding the `@else` is true.
+
 #1.3.0 - 2015-08-19
 * Add support for nested if statements
 * Add boolean data type

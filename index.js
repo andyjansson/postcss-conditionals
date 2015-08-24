@@ -128,15 +128,15 @@ var evalParseTree = function (tree) {
         var converted = convertNodes(left, right);
         left = converted.left;
         right = converted.right;
-        
+
         if (left.type == 'ColorValue') {
             var val1 = color(left.value).toRgbaArray(),
                 val2 = color(right.value).toRgbaArray();
-                
+
             if (val1[3] !== val2[3]) {
                 throw new Error('Alpha channels must be equal');
             }
-                
+
             switch (operator) {
                 case '+':
                     val1[0] = Math.min(val1[0] + val2[0], 255);
@@ -191,7 +191,7 @@ var evalParseTree = function (tree) {
                 return parseMathExpression(parseTree(subtree.left), parseTree(subtree.right), subtree.operator);
             case 'UnaryExpression':
                 return !parseTree(subtree.argument);
-            case 'BooleanValue': 
+            case 'BooleanValue':
                 return subtree.value;
             case 'ColorValue':
                 subtree.value = color(subtree.value).toHexString();
@@ -232,9 +232,9 @@ var parseIfStatement = function(rule, input) {
     var next = rule.next();
     if (typeof next !== 'undefined' && next.type === 'atrule' && next.name === 'else') {
         if (next.params.substr(0, 2) === 'if')
-            parseIfStatement(next, next.params.substr(3), passed);
+            parseIfStatement(next, next.params.substr(3), passed || previousPassed);
         else
-            parseElseStatement(next, passed);
+            parseElseStatement(next, passed || previousPassed);
     }
     rule.removeSelf();
 };

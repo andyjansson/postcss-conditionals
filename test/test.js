@@ -79,3 +79,6 @@ test('@if false OR false { success {} }', '');
 test('@if true == true { success {} }', 'success {}');
 test('@if true == false { success {} }', '');
 test('@if true != false { success {} }', 'success {}');
+test('@if true { foo: bar } @else if false { bar: baz } @else { bat: quux }', 'foo: bar');
+test('@if false { foo: bar } @else if true { bar: baz } @else { bat: quux }', 'bar: baz');
+test('@if false { foo: bar } @else if false { bar: baz } @else { bat: quux }', 'bat: quux');
