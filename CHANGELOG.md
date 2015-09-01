@@ -1,3 +1,8 @@
+#1.4.0 - 2015-09-1
+* Fix value type being incorrectly transformed for certain unit types.
+* Expand mixed-type operations to include things such as comparisons of
+  differently typed values. 
+
 #1.3.1 - 2015-08-24
 * Fix `@else` incorrectly being invoked when any statement other than the one
   directly preceding the `@else` is true.
