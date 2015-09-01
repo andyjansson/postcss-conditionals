@@ -22,7 +22,7 @@
   "dependencies": {
     "css-color-converter": "^1.0.2",
     "css-unit-converter": "^1.0.0",
-    "postcss": "^4.1.5"
+    "postcss": "^5.0.4"
   },
   "devDependencies": {
     "tap-dot": "^1.0.0",
