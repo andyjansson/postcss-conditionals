@@ -1,6 +1,6 @@
 {
   "name": "postcss-conditionals",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "PostCSS plugin that enables @if statements in your CSS",
   "keywords": [
     "postcss",
