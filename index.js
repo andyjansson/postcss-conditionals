@@ -85,7 +85,8 @@ var convertNodes = function (left, right) {
                 case 'VminValue':
                 case 'VmaxValue':
                 case 'PercentageValue':
-                    return { type: right.type, value: left.value };
+                    converted.left = { type: right.type, value: left.value };
+                    break;
                 case 'Value':
                     break;
                 default:
