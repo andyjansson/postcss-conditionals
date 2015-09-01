@@ -6,7 +6,8 @@ var postcss     = require('postcss'),
 var convertNodes = function (left, right) {
     var converted = {
         left: left,
-        right: right
+        right: right,
+        operators: ['!=', '==']
     };
     if (typeof left === 'boolean') {
         if (typeof right !== 'boolean')
@@ -17,13 +18,11 @@ var convertNodes = function (left, right) {
         case 'ColorValue':
             converted.left = { type: left.type, value: color(left.value).toHexString() };
             switch (right.type) {
-                case left.type:
-                    break;
-                case 'Value':
+              case 'Value':
                     converted.right = { type: left.type, value: color().fromRgb([right.value, right.value, right.value]).toHexString() };
-                    break;
-                default:
-                    throw new Error('Cannot convert ' + (typeof right !== 'boolean' ? right.type : 'Boolean') + ' to ' + left.type);
+                case left.type:
+                    converted.operators = converted.operators.concat(['+', '-', '*', '/']);
+                  break;
             }
             break;
         case 'LengthValue':
@@ -33,13 +32,11 @@ var convertNodes = function (left, right) {
         case 'ResolutionValue':
             switch (right.type) {
                 case left.type:
-                    converted.right = { type: left.type, value: unitconvert(right.value, right.unit, left.unit), unit: left.unit };
-                    break;
+                    converted.right.value = unitconvert(right.value, right.unit, left.unit);
                 case 'Value':
                     converted.right = { type: left.type, value: right.value, unit: left.unit };
+                    converted.operators = converted.operators.concat(['>=', '>', '<=', '<', '+', '-', '*', '/']);
                     break;
-                default:
-                    throw new Error('Cannot convert ' + (typeof right !== 'boolean' ? right.type : 'Boolean') + ' to ' + left.type);
             }
             break;
         case 'EmValue':
@@ -55,19 +52,17 @@ var convertNodes = function (left, right) {
                 case left.type:
                 case 'Value':
                     converted.right = { type: left.type, value: right.value, unit: left.unit };
+                    converted.operators = converted.operators.concat(['>=', '>', '<=', '<', '+', '-', '*', '/']);
                     break;
-                default:
-                    throw new Error('Cannot convert ' + (typeof right !== 'boolean' ? right.type : 'Boolean') + ' to ' + left.type);
             }
             break;
         case 'String':
-            if (right.type !== 'String')
-                throw new Error('Cannot convert ' + (typeof right !== 'boolean' ? right.type : 'Boolean') + ' to ' + left.type);
             break;
         case 'Value':
             switch (right.type) {
                 case 'ColorValue':
                     converted.left = { type: right.type, value: color().fromRgb([left.value, left.value, left.value]).toHexString() };
+                    converted.operators = converted.operators.concat(['+', '-', '*', '/']);
                     break;
                 case 'LengthValue':
                 case 'AngleValue':
@@ -75,6 +70,7 @@ var convertNodes = function (left, right) {
                 case 'FrequencyValue':
                 case 'ResolutionValue':
                     converted.left = { type: right.type, value: left.value, unit: right.unit };
+                    converted.operators = converted.operators.concat(['>=', '>', '<=', '<', '+', '-', '*', '/']);
                     break;
                 case 'EmValue':
                 case 'ExValue':
@@ -86,11 +82,9 @@ var convertNodes = function (left, right) {
                 case 'VmaxValue':
                 case 'PercentageValue':
                     converted.left = { type: right.type, value: left.value };
-                    break;
                 case 'Value':
+                    converted.operators = converted.operators.concat(['>=', '>', '<=', '<', '+', '-', '*', '/']);
                     break;
-                default:
-                    throw new Error('Cannot convert ' + (typeof right !== 'boolean' ? right.type : 'Boolean') + ' to ' + left.type);
             }
     }
     return converted;
@@ -109,10 +103,16 @@ var evalParseTree = function (tree) {
         if (typeof left === 'boolean') comparison = cmp(left, right);
         else comparison = cmp(left.value, right.value);
 
+        if (converted.operators.indexOf(operator) < 0) {
+            throw new Error("Invalid operands for operator '" + operator+ "'");
+        }
+
         switch (operator) {
             case '==':
+                if (left.type !== right.type) return false;
                 return comparison === 0;
             case '!=':
+                if (left.type !== right.type) return true;
                 return comparison !== 0;
             case '>=':
                 return comparison >= 0;
@@ -129,6 +129,10 @@ var evalParseTree = function (tree) {
         var converted = convertNodes(left, right);
         left = converted.left;
         right = converted.right;
+
+        if (converted.operators.indexOf(operator) < 0) {
+            throw new Error("Invalid operands for operator '" + operator+ "'");
+        }
 
         if (left.type == 'ColorValue') {
             var val1 = color(left.value).toRgbaArray(),

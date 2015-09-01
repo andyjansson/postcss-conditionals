@@ -14,6 +14,8 @@ test('@if a == b { success {} } @else { branch {} }', 'branch {}');
 test('@if a == b { success {} }', '');
 test('@if a != b { success {} }', 'success {}');
 test('@if a != a { success {} }', '');
+test('@if a != 0 { success {} }', 'success {}');
+test('@if a == 0 { success {} }', '');
 test('@if 2 > 1 { success {} }', 'success {}');
 test('@if 1 > 2 { success {} }', '');
 test('@if 2 >= 2 { success {} }', 'success {}');
