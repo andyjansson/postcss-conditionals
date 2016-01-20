@@ -1,3 +1,6 @@
+#2.0.1 - 2016-01-20
+* Allow for quoted empty strings
+
 #2.0.0 - 2015-09-01
 * Update to PostCSS v5.
 

@@ -200,7 +200,7 @@ hsla\(\s*[0-9]+\s*\,\s*[0-9]+\%\s*\,\s*[0-9]+\%\s*\,\s*([0-1]|0?\.[0-9]+)\s*\)  
 [0-9]+("."[0-9]+)?\%                                                                  return 'PERCENTAGE';
 [0-9]+("."[0-9]+)?\b                                                                  return 'NUMBER';
 [a-zA-Z0-9-_]+\b                                                                      return 'STRING';
-\'(\\\'|[^\'\\])+\'                                                                   yytext = yytext.slice(1,-1); return 'STRING';
+\'(\\\'|[^\'\\])*\'                                                                   yytext = yytext.slice(1,-1); return 'STRING';
 "("                                                                                   return 'LPAREN';
 ")"                                                                                   return 'RPAREN';
 "=="                                                                                  return 'RELOP';
@@ -241,7 +241,7 @@ expr
 	| string { $$ = $1; }
 	;
 
-binary_expression 
+binary_expression
 	: expr RELOP expr %prec UPREC { $$ = { type: 'BinaryExpression', operator: $2, left: $1, right: $3 }; }
 	;
 
@@ -271,16 +271,16 @@ bool_value
 	: BOOL { $$ = { type: 'BooleanValue', value: $1.toLowerCase() == "true" }; }
 	| LPAREN bool_value RPAREN { $$ = $2; }
 	;
-	
+
 value
 	: NUMBER { $$ = { type: 'Value', value: $1 }; }
 	| SUB NUMBER { $$ = { type: 'Value', value: -$2 }; }
 	;
 
 css_value
-	: LENGTH { $$ = { type: 'LengthValue', value: parseFloat($1), unit: /[a-z]+/.exec($1)[0] }; } 
-	| ANGLE { $$ = { type: 'AngleValue', value: parseFloat($1), unit: /[a-z]+/.exec($1)[0] }; } 
-	| TIME { $$ = { type: 'TimeValue', value: parseFloat($1), unit: /[a-z]+/.exec($1)[0] }; } 
+	: LENGTH { $$ = { type: 'LengthValue', value: parseFloat($1), unit: /[a-z]+/.exec($1)[0] }; }
+	| ANGLE { $$ = { type: 'AngleValue', value: parseFloat($1), unit: /[a-z]+/.exec($1)[0] }; }
+	| TIME { $$ = { type: 'TimeValue', value: parseFloat($1), unit: /[a-z]+/.exec($1)[0] }; }
 	| FREQ { $$ = { type: 'FrequencyValue', value: parseFloat($1), unit: /[a-z]+/.exec($1)[0] }; }
 	| RES { $$ = { type: 'ResolutionValue', value: parseFloat($1), unit: /[a-z]+/.exec($1)[0] }; }
 	| EMS { $$ = { type: 'EmValue', value: parseFloat($1) }; }
