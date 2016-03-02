@@ -1,3 +1,7 @@
+#2.0.2 - 2016-03-02
+* Fix parsing of strings with escape character used for escaping characters
+  other than single quotes [#12](https://github.com/andyjansson/postcss-conditionals/issues/12)
+
 #2.0.1 - 2016-01-20
 * Allow for quoted empty strings
 
