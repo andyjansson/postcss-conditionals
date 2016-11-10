@@ -1,3 +1,7 @@
+#2.0.3 - 2016-11-10
+* Fix string token to include dots, enabling use of class names (among other
+  things) in expressions
+
 #2.0.2 - 2016-03-02
 * Fix parsing of strings with escape character used for escaping characters
   other than single quotes [#12](https://github.com/andyjansson/postcss-conditionals/issues/12)

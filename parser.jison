@@ -3,7 +3,7 @@
 /* lexical grammar */
 %lex
 %%
-\s+                                                                            /* skip whitespace */
+\s+                                                                                   /* skip whitespace */
 "true"                                                                                return 'BOOL';
 "TRUE"                                                                                return 'BOOL';
 "false"                                                                               return 'BOOL';
@@ -199,7 +199,7 @@ hsla\(\s*[0-9]+\s*\,\s*[0-9]+\%\s*\,\s*[0-9]+\%\s*\,\s*([0-1]|0?\.[0-9]+)\s*\)  
 [0-9]+("."[0-9]+)?vmax\b                                                              return 'VMAXS';
 [0-9]+("."[0-9]+)?\%                                                                  return 'PERCENTAGE';
 [0-9]+("."[0-9]+)?\b                                                                  return 'NUMBER';
-[a-zA-Z0-9-_]+\b                                                                      return 'STRING';
+[a-zA-Z0-9-_.]+\b                                                                     return 'STRING';
 \'(\\[^\']|[^\'\\])*\'                                                                yytext = yytext.slice(1,-1); return 'STRING';
 "("                                                                                   return 'LPAREN';
 ")"                                                                                   return 'RPAREN';
