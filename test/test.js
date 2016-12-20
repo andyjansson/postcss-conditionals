@@ -85,6 +85,9 @@ test('@if true { foo: bar } @else if false { bar: baz } @else { bat: quux }', 'f
 test('@if false { foo: bar } @else if true { bar: baz } @else { bat: quux }', 'bar: baz');
 test('@if false { foo: bar } @else if false { bar: baz } @else { bat: quux }', 'bat: quux');
 test('@if \'\' == \'\' { foo: bar }', 'foo: bar');
+test('@if "" == "" { foo: bar }', 'foo: bar');
+test('@if \'\' == "" { foo: bar }', 'foo: bar');
+test('@if "" == \'\' { foo: bar }', 'foo: bar');
 test('@if \'foo\\bar\' == \'foo\\bar\' { foo: bar }', 'foo: bar');
 test('@if .foo == .foo { foo: bar }', 'foo: bar');
 test('@if .foo == .bar { foo: bar }', '');
