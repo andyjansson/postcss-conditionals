@@ -27,7 +27,7 @@ var output = postcss()
   .css;
 ```
 
-Using this ```input.css```: 
+Using this ```input.css```:
 
 ```css
 .foo {
@@ -70,7 +70,7 @@ and with [postcss-for]:
 
 ```css
 @for $i from 1 to 3 {
-  .b-$i { 
+  .b-$i {
     width: $i px;
     @if $i == 2 {
       color: green;
@@ -80,3 +80,8 @@ and with [postcss-for]:
 ```
 
 [postcss-for]: https://github.com/antyakushev/postcss-for
+
+## Development
+1. Clone repository
+2. Install dependencies `npm install`
+3. If `parser.jison` file has been changed, regenerate `parser.js` by running `npm run gen-parser`

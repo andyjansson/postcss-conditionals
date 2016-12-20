@@ -25,10 +25,12 @@
     "postcss": "^5.0.4"
   },
   "devDependencies": {
+    "jison": "^0.4.17",
     "tap-dot": "^1.0.0",
     "tape": "^4.0.2"
   },
   "scripts": {
-    "test": "node test/test.js | tap-dot"
+    "test": "node test/test.js | tap-dot",
+    "gen-parser": "jison parser.jison"
   }
 }
