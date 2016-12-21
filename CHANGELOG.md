@@ -1,3 +1,6 @@
+#2.1.0 - 2016-12-21
+* Add support for double-quoted strings [#16](https://github.com/andyjansson/postcss-conditionals/issues/16).
+
 #2.0.3 - 2016-11-10
 * Fix string token to include dots, enabling use of class names (among other
   things) in expressions
