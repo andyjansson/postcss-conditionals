@@ -1,6 +1,6 @@
 {
   "name": "postcss-conditionals",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "PostCSS plugin that enables @if statements in your CSS",
   "keywords": [
     "postcss",
@@ -22,15 +22,36 @@
   "dependencies": {
     "css-color-converter": "^1.0.2",
     "css-unit-converter": "^1.0.0",
-    "postcss": "^5.0.4"
+    "postcss": "^6.0.1"
   },
   "devDependencies": {
-    "jison": "^0.4.17",
-    "tap-dot": "^1.0.0",
-    "tape": "^4.0.2"
+    "ava": "^0.18.2",
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
+    "babel-eslint": "^7.1.1",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-env": "^1.4.0",
+    "babel-register": "^6.18.0",
+    "cross-env": "^3.1.4",
+    "del-cli": "^0.2.1",
+    "eslint": "^3.12.2",
+    "eslint-config-i-am-meticulous": "^6.0.1",
+    "eslint-plugin-babel": "^4.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "jison": "^0.4.17"
   },
   "scripts": {
-    "test": "node test/test.js | tap-dot",
-    "gen-parser": "jison parser.jison"
+    "prepublish": "npm run build && del-cli dist/__tests__",
+    "build": "del-cli dist && cross-env BABEL_ENV=publish babel src --out-dir dist && jison parser.jison -o dist/lib/parser.js",
+    "pretest": "eslint src && npm run build",
+    "test": "ava dist/__tests__/"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "extends": "eslint-config-i-am-meticulous"
   }
 }

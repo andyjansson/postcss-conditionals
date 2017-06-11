@@ -274,8 +274,8 @@ bool_value
 	;
 
 value
-	: NUMBER { $$ = { type: 'Value', value: $1 }; }
-	| SUB NUMBER { $$ = { type: 'Value', value: -$2 }; }
+	: NUMBER { $$ = { type: 'Value', value: parseFloat($1) }; }
+	| SUB NUMBER { $$ = { type: 'Value', value: -parseFloat($2) }; }
 	;
 
 css_value
